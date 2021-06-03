@@ -15,6 +15,9 @@ import me.ele.uetool.base.Element;
 import static me.ele.uetool.base.DimenUtil.dip2px;
 import static me.ele.uetool.base.DimenUtil.px2dip;
 
+/**
+ * 编辑属性Layout，继承CollectViewsLayout获取所有Views的信息
+ */
 public class EditAttrLayout extends CollectViewsLayout {
 
     private final int moveUnit = dip2px(1);
@@ -62,6 +65,7 @@ public class EditAttrLayout extends CollectViewsLayout {
                 lastY = event.getY();
                 break;
             case MotionEvent.ACTION_UP:
+                //点击获取当前事件,根据事件的x,y坐标，获取指定Element即View，然后展示View的相关信息
                 mode.triggerActionUp(event);
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -196,6 +200,7 @@ public class EditAttrLayout extends CollectViewsLayout {
                         }
                     });
                 }
+                //使用匹配的targetElement显示它相关属性的Dialog
                 dialog.show(targetElement);
             }
         }

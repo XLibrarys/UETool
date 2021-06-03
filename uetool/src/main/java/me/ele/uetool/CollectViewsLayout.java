@@ -21,6 +21,9 @@ import me.ele.uetool.base.ReflectionP.Func;
 
 import static me.ele.uetool.base.DimenUtil.*;
 
+/**
+ * 收集View的布局，在View第一帧展示的时候，收集页面上所有的View信息
+ */
 public class CollectViewsLayout extends View {
 
     private final int halfEndPointWidth = dip2px(2.5f);
@@ -73,6 +76,7 @@ public class CollectViewsLayout extends View {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         try {
+            //获取当前显示的目标Activity
             final Activity targetActivity = UETool.getInstance().getTargetActivity();
             final WindowManager windowManager = targetActivity.getWindowManager();
 
@@ -98,10 +102,12 @@ public class CollectViewsLayout extends View {
                         }
                     }
                 } else {
+
                     ReflectionP.breakAndroidP(new Func<Void>() {
                         @Override
                         public Void call() {
                             try {
+                                //获取当前目标Activity的decorView
                                 Field mRootsField = Class.forName("android.view.WindowManagerGlobal").getDeclaredField("mRoots");
                                 mRootsField.setAccessible(true);
                                 List viewRootImpls;
@@ -117,6 +123,7 @@ public class CollectViewsLayout extends View {
                                     WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) mWindowAttributesField.get(object);
                                     if (layoutParams.getTitle().toString().contains(targetActivity.getClass().getName())
                                             || getTargetDecorView(targetActivity, decorView) != null) {
+                                        //根据decorView所有View，生成Element元素
                                         createElements(decorView);
                                         break;
                                     }
@@ -157,7 +164,7 @@ public class CollectViewsLayout extends View {
     }
 
     private void createElements(View view) {
-
+        //根据docorview递归获取所有view构造elements集合
         List<Element> elements = new ArrayList<>();
         traverse(view, elements);
 
@@ -169,6 +176,7 @@ public class CollectViewsLayout extends View {
             }
         });
 
+        //保存所有elements集合
         this.elements.addAll(elements);
 
     }
@@ -208,6 +216,7 @@ public class CollectViewsLayout extends View {
         Element target = null;
         for (int i = elements.size() - 1; i >= 0; i--) {
             final Element element = elements.get(i);
+            //根据View的React判断当前View是否选中
             if (element.getRect().contains((int) x, (int) y)) {
                 if (isParentNotVisible(element.getParentElement())) {
                     continue;

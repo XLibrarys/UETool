@@ -202,6 +202,7 @@ public class UETMenu extends LinearLayout {
 
     public void show() {
         try {
+            //浮窗显示：向Window页面添加和移除View，做显示和隐藏
             windowManager.addView(this, getWindowLayoutParams());
         } catch (Exception e) {
             e.printStackTrace();

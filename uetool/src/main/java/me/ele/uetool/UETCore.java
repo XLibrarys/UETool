@@ -21,10 +21,12 @@ public class UETCore implements IAttrs {
 
     @Override
     public List<Item> getAttrs(Element element) {
+        //获取指定view的相关属性
         List<Item> items = new ArrayList<>();
 
         View view = element.getView();
 
+        //展示相关view的属性
         items.add(new TextItem("Fragment", Util.getCurrentFragmentName(element.getView()), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
