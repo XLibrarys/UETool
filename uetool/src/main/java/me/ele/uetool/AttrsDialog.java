@@ -47,6 +47,9 @@ import static me.ele.uetool.base.DimenUtil.dip2px;
 import static me.ele.uetool.base.DimenUtil.getScreenHeight;
 import static me.ele.uetool.base.DimenUtil.getScreenWidth;
 
+/**
+ * 选中View的属性对话框
+ */
 public class AttrsDialog extends Dialog {
 
     private RecyclerView vList;
@@ -284,9 +287,11 @@ public class AttrsDialog extends Dialog {
                                 textView.setTextColor(color);
                             }
                         } else if (item.getType() == EditTextItem.Type.TYPE_WIDTH) {
+                            //如果改变View的宽度
                             View view = item.getElement().getView();
                             int width = dip2px(Integer.valueOf(s.toString()));
                             if (Math.abs(width - view.getWidth()) >= dip2px(1)) {
+                                //更新View LayoutParams.width，requestLayout重新刷新View
                                 view.getLayoutParams().width = width;
                                 view.requestLayout();
                             }
