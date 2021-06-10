@@ -13,9 +13,14 @@ import me.ele.uetool.base.Element;
 
 import static me.ele.uetool.base.DimenUtil.dip2px;
 
+/**
+ * 相对位置布局，继承CollectViewsLayout收集页面上所有元素信息
+ */
 public class RelativePositionLayout extends CollectViewsLayout {
 
+    //相对布局，只保存选中序列中最近2个的元素，计算相对位置信息
     private final int elementsNum = 2;
+
     private Paint areaPaint = new Paint() {
         {
             setAntiAlias(true);
@@ -47,11 +52,14 @@ public class RelativePositionLayout extends CollectViewsLayout {
             case MotionEvent.ACTION_DOWN:
                 break;
             case MotionEvent.ACTION_UP:
-
+                //获取当前选中的目标element
                 final Element element = getTargetElement(event.getX(), event.getY());
                 if (element != null) {
+                    //更新最近选中的2个element
                     relativeElements[searchCount % elementsNum] = element;
                     searchCount++;
+
+                    //触发onDraw绘制两个View的相关信息
                     invalidate();
                 }
                 break;
@@ -68,6 +76,7 @@ public class RelativePositionLayout extends CollectViewsLayout {
         }
 
         boolean doubleNotNull = true;
+        //绘制当前选中的元素标注信息
         for (Element element : relativeElements) {
             if (element != null) {
                 Rect rect = element.getRect();
@@ -81,10 +90,12 @@ public class RelativePositionLayout extends CollectViewsLayout {
             }
         }
 
+        //如果两个View都不为null，则绘制两个View的相对标注信息
         if (doubleNotNull) {
             Rect firstRect = relativeElements[searchCount % elementsNum].getRect();
             Rect secondRect = relativeElements[(searchCount - 1) % elementsNum].getRect();
 
+            //如果有交叉的区域，则绘制交叉的信息
             if (secondRect.top > firstRect.bottom) {
                 int x = secondRect.left + secondRect.width() / 2;
                 drawLineWithText(canvas, x, firstRect.bottom, x, secondRect.top);
@@ -105,6 +116,7 @@ public class RelativePositionLayout extends CollectViewsLayout {
                 drawLineWithText(canvas, secondRect.right, y, firstRect.left, y);
             }
 
+            //如果没有交叉区域，则绘制距离坐标
             drawNestedAreaLine(canvas, firstRect, secondRect);
             drawNestedAreaLine(canvas, secondRect, firstRect);
         }
