@@ -17,6 +17,9 @@ import static android.view.Gravity.BOTTOM;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static me.ele.uetool.TransparentActivity.Type.*;
 
+/**
+ * 开启UE工具后，选择捕获控件/相对位置等，显示的透明Activity，用于显示UI的标注等信息
+ */
 public class TransparentActivity extends AppCompatActivity {
 
     public static final String EXTRA_TYPE = "extra_type";
@@ -113,8 +116,8 @@ public class TransparentActivity extends AppCompatActivity {
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {
         int TYPE_UNKNOWN = -1;
-        int TYPE_EDIT_ATTR = 1;
-        int TYPE_SHOW_GRIDDING = 2;
-        int TYPE_RELATIVE_POSITION = 3;
+        int TYPE_EDIT_ATTR = 1;//捕获控件
+        int TYPE_SHOW_GRIDDING = 2;//网格栅栏
+        int TYPE_RELATIVE_POSITION = 3;//相对位置
     }
 }

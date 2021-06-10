@@ -52,7 +52,7 @@ public class EditAttrLayout extends CollectViewsLayout {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (targetElement != null) {
-            canvas.drawRect(targetElement.getRect(), areaPaint);
+            canvas.drawRect(targetElement.getRect(), areaPaint);//绘制元素的边界
             mode.onDraw(canvas);
         }
     }
@@ -144,11 +144,16 @@ public class EditAttrLayout extends CollectViewsLayout {
         }
     }
 
+    /**
+     * Show模式，用于使用Dialog显示View的属性，在View的周边绘制标注信息
+     */
     class ShowMode implements IMode {
 
         @Override
         public void onDraw(Canvas canvas) {
+            //获取选中元素的React
             Rect rect = targetElement.getRect();
+            //绘制元素的左右和上下标线
             drawLineWithText(canvas, rect.left, rect.top - lineBorderDistance, rect.right, rect.top - lineBorderDistance);
             drawLineWithText(canvas, rect.right + lineBorderDistance, rect.top, rect.right + lineBorderDistance, rect.bottom);
         }
@@ -160,11 +165,12 @@ public class EditAttrLayout extends CollectViewsLayout {
 
         @Override
         public void triggerActionUp(final MotionEvent event) {
+            //点击抬起后，获取选中的元素
             final Element element = getTargetElement(event.getX(), event.getY());
             if (element != null) {
-                targetElement = element;
-                invalidate();
-                if (dialog == null) {
+                targetElement = element; //更新选中的元素
+                invalidate();//触发onDraw()重新绘制，绘制元素的标注信息
+                if (dialog == null) {//显示元素信息对话框
                     dialog = new AttrsDialog(getContext());
                     dialog.setAttrDialogCallback(new AttrsDialog.AttrDialogCallback() {
                         @Override
@@ -206,11 +212,16 @@ public class EditAttrLayout extends CollectViewsLayout {
         }
     }
 
+    /**
+     * 模式接口，定义了在不同模式下执行的动作
+     */
     public interface IMode {
+        //绘制动作，负责绘制选中元素的标注信息
         void onDraw(Canvas canvas);
 
         void triggerActionMove(MotionEvent event);
 
+        //点击操作，负责查找到选中的目标元素，执行后续的元素Dialog显示，触发元素绘制
         void triggerActionUp(MotionEvent event);
     }
 
