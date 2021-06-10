@@ -12,7 +12,9 @@ import android.view.View;
 import static me.ele.uetool.base.DimenUtil.dip2px;
 import static me.ele.uetool.base.DimenUtil.getScreenHeight;
 import static me.ele.uetool.base.DimenUtil.getScreenWidth;
-
+/**
+ * 网格布局，负责绘制网络，将当前Activity分发的事件传递给目标Activity进行分发处理
+ */
 public class GriddingLayout extends View {
 
     public static final int LINE_INTERVAL = dip2px(5);
@@ -59,6 +61,7 @@ public class GriddingLayout extends View {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
+        //事件传递给目标Activity进行处理，保证页面能滑动操作
         bindActivity.dispatchTouchEvent(event);
         return super.dispatchTouchEvent(event);
     }
